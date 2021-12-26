@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus-default.yaml:/etc/prometheus/prometheus.yml
+  
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+  
+  # metrics exporter as an adapter of the redis container
+  redis-metrics-exporter:
+    image: oliver006/redis_exporter
+    ports:
+      - 9121:9121
+    environment:
+      - REDIS_ADDR=redis:6379
